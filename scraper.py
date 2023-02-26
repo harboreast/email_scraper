@@ -125,15 +125,11 @@ for i in (pbar := tqdm(urls, total=num_lines, position=0, leave=True)):
         domain = domain.replace("[", "")
         domain = domain.replace("]", "")
 
-        # pbar2.refresh()
         if domain_cntr is not len(urls):
             pbar2.set_description(f"Host: {domain}: Progress")
 
         if domain in url:
-
-            # get url's content
-            # print("Crawling URL %s" % url)
-
+            
             h = requests.head(url)
             header = h.headers
             content_type = header.get('content-type')
@@ -180,8 +176,6 @@ for i in (pbar := tqdm(urls, total=num_lines, position=0, leave=True)):
             except http.client.IncompleteRead as e:
                 skipped = True
                 continue
-
-            # print("Crawling URL %s" % url)
 
             try:
                 response = requests.get(url, timeout=10, verify=True)
@@ -239,6 +233,7 @@ for i in (pbar := tqdm(urls, total=num_lines, position=0, leave=True)):
 
 from footer_asci import ytc
 
+# clean up the list
 
 def ctl():
     keywords = ['.gov', '.png', 'jpg', 'png', 'set()', 'PNG', 'JPG', 'jpeg', 'JPEG', 'wixpress', '2x.png', '2x.jpg']
