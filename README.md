@@ -37,7 +37,7 @@ Disallow:
           |/  \|
 
 
-Single threaded, I will update this maybe, someday but probably not.
+Single threaded data scraper that will loop through a txt file of predefined domains, crawl the domains and then scrape and save any found emails to txt.
 
 To change the amount of pages scraped per host (domain) edit:
 
