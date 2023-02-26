@@ -55,4 +55,4 @@ if cntr >= [SAME AMOUNT DEFINED ABOVE, HERE AS WELL]:
 scraped_emails.txt is an uncleaned original list of perceieved email data.
 final_scraped_emails.txt is the clensed list from scraped_emails.txt
 
-I will updated the script to be more incongnito with use of header data and proxies, just had no need at this point.
+I will update the script to be more incongnito with use of header data and proxies, just had no need at this point.
