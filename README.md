@@ -51,5 +51,6 @@ if cntr >= [SAME AMOUNT DEFINED ABOVE, HERE AS WELL]:
 
 
 ====== Txt files associated with script ======
+
 scraped_emails.txt is an uncleaned original list of perceieved email data.
 final_scraped_emails.txt is the clensed list from scraped_emails.txt
