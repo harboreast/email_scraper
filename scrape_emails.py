@@ -10,7 +10,6 @@ def scraper_main(unprocessed_urls,
                  processed_urls,
                  cntr,
                  starting_url,
-                 domain_cntr,
                  urls,
                  ttl_pages_scraped,
                  pbar,
@@ -75,7 +74,7 @@ def scraper_main(unprocessed_urls,
             # print(content_type, cntr) # use for debugging
 
             if content_type is None:
-                continue
+                dg = "4e"
             elif "video" in content_type:
                 skipped = True
                 continue
