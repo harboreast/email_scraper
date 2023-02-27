@@ -62,9 +62,7 @@ def scraper_main(unprocessed_urls,
         domain = domain.replace("[", "")
         domain = domain.replace("]", "")
 
-        # pbar2.refresh()
-        if domain_cntr is not len(urls):
-            pbar2.set_description(f"Host: {domain}: Progress")
+        pbar2.set_description(f"Host: {domain}: Progress")
 
         if domain in url:
 
