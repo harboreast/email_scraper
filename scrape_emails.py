@@ -1,9 +1,9 @@
-from urllib.parse import urlsplit
-import re
 import http
+import re
 import socket
 import requests.exceptions
 from bs4 import BeautifulSoup
+from urllib.parse import urlsplit
 
 
 def scraper_main(unprocessed_urls,
@@ -15,8 +15,9 @@ def scraper_main(unprocessed_urls,
                  pbar,
                  pbar2,
                  emails,
-                 headers):
-
+                 headers,
+                 domain):
+  
     # process urls one by one from unprocessed_url queue until queue is empty
     while len(unprocessed_urls):
 
@@ -50,19 +51,7 @@ def scraper_main(unprocessed_urls,
         if "smartlink" in url:
             continue
 
-        d = starting_url
-
-        domain = re.findall('(\w+)://',
-                            d)
-        domain = re.findall('://www.([\w\-\.]+)',
-                            d)
-        domain = str(domain)
-        domain = domain.replace("'", "")
-        domain = domain.replace("[", "")
-        domain = domain.replace("]", "")
-
-        # pbar2.refresh()
-        # if domain_cntr is not len(urls):
+        pbar2.refresh()
         pbar2.set_description(f"Host: {domain}: Progress")
 
         if domain in url:
