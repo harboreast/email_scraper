@@ -1,3 +1,6 @@
+import re
+from urllib.parse import urlparse
+
 import urllib3
 import scrape_emails
 from tqdm.auto import tqdm
@@ -13,7 +16,6 @@ headers = Headers(os="mac", headers=True).generate()
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 warnings.filterwarnings('ignore', category=XMLParsedAsHTMLWarning)
-
 
 if __name__ == '__main__':
 
@@ -55,6 +57,10 @@ if __name__ == '__main__':
         # set of already crawled urls for email
         processed_urls = set()
 
+        d = starting_url
+
+        domain = urlparse(d).netloc
+
         # increment current position of domain cntr var for tracking
         if domain_cntr is not len(urls):
             domain_cntr += 1
@@ -72,7 +78,8 @@ if __name__ == '__main__':
                                    pbar,
                                    pbar2,
                                    emails,
-                                   headers)
+                                   headers,
+                                   domain)
 
     list_cleaner.ctl()
 
