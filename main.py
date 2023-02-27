@@ -67,7 +67,6 @@ if __name__ == '__main__':
                                    processed_urls,
                                    cntr,
                                    starting_url,
-                                   domain_cntr,
                                    urls,
                                    ttl_pages_scraped,
                                    pbar,
