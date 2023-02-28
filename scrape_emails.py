@@ -49,6 +49,7 @@ def scraper_main(unprocessed_urls,
                  domain_cntr,
                  skip_cntr,
                  headers):
+    
     # second instance of progress bar (the second printed on the terminal screen)
     pbar2 = tqdm(desc='Loading next host...', total=100, position=0, leave=False)
 
