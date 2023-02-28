@@ -10,9 +10,6 @@ from collections import deque
 import list_cleaner
 import yt
 import lists_and_shit
-from fake_headers import Headers
-
-headers = Headers(os="mac", headers=True).generate()
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 warnings.filterwarnings('ignore', category=XMLParsedAsHTMLWarning)
@@ -59,7 +56,7 @@ if __name__ == '__main__':
 
         d = starting_url
 
-        domain = urlparse(d).netloc
+        # domain = urlparse(d).netloc
 
         # increment current position of domain cntr var for tracking
         if domain_cntr is not len(urls):
@@ -77,9 +74,7 @@ if __name__ == '__main__':
                                    ttl_pages_scraped,
                                    pbar,
                                    pbar2,
-                                   emails,
-                                   headers,
-                                   domain)
+                                   emails)
 
     list_cleaner.ctl()
 
