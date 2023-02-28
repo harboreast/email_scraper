@@ -1,4 +1,5 @@
 import requests
+from colors import bcolors
 
 
 def ctl():
@@ -53,11 +54,11 @@ def first_url_check():
             get = requests.get(xxx, verify=True, timeout=5)
             # if the request succeeds
             if get.status_code == 200:
-                print(f"{xxx}: is reachable,  {get.status_code}")
+                print(f"""{bcolors.Green}{xxx}: is reachable,  {get.status_code}""")
                 cntr += 1
                 urls.append(xxx)
             else:
-                print(f"{xxx}: Failed. {get.status_code}")
+                print(f"""{bcolors.FAIL}{xxx}: Failed. {get.status_code}""")
                 wcntr += 1
 
         # Exception
