@@ -1,6 +1,7 @@
 import re
 from urllib.parse import urlparse
 
+import requests
 import urllib3
 import scrape_emails
 from tqdm.auto import tqdm
@@ -10,11 +11,24 @@ from collections import deque
 import list_cleaner
 import yt
 import lists_and_shit
+import total_scraped
+import time
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 warnings.filterwarnings('ignore', category=XMLParsedAsHTMLWarning)
 
 if __name__ == '__main__':
+
+    decider = input("Sanitize urls list? (y):")
+
+    if decider == "y":
+        urls = list_cleaner.first_url_check()
+    else:
+        urls = []
+        f = open('input_urls.txt', 'r+')
+        f1 = f.readlines()
+        for xx in f1:
+            urls.append(xx.rstrip())
 
     with open(r"input_urls.txt", 'r') as fp:
         total_lines = len(fp.readlines())
@@ -25,12 +39,6 @@ if __name__ == '__main__':
     # lists, groups, datasets etc.
     lists_and_shit.las()
 
-    urls = []
-    f = open('input_urls.txt', 'r+')
-    f1 = f.readlines()
-    for i in f1:
-        urls.append(i.rstrip())
-
     # a set of fetched emails
     emails = set()
     em_cntr = 0
@@ -40,11 +48,9 @@ if __name__ == '__main__':
 
     domain_cntr = 0
 
-    # second instance of progress bar (the second printed on the terminal screen)
-    pbar2 = tqdm(desc='while loop', total=333, position=1, leave=False)
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36"}
 
-    for i in (pbar := tqdm(urls, total=num_lines, position=0, leave=True)):
-
+    for i in (pbar := tqdm(urls, total=num_lines, position=1, leave=False)):
         # starting url. replace google with your own url.
         starting_url = i
 
@@ -58,13 +64,12 @@ if __name__ == '__main__':
 
         # domain = urlparse(d).netloc
 
-        # increment current position of domain cntr var for tracking
-        if domain_cntr is not len(urls):
-            domain_cntr += 1
-
         cntr = 0
 
         skipped = False
+
+        # track amount of skipped urls, if more than 3 break loop move to next host
+        skip_cntr = 0
 
         scrape_emails.scraper_main(unprocessed_urls,
                                    processed_urls,
@@ -73,8 +78,10 @@ if __name__ == '__main__':
                                    urls,
                                    ttl_pages_scraped,
                                    pbar,
-                                   pbar2,
-                                   emails)
+                                   emails,
+                                   domain_cntr,
+                                   skip_cntr,
+                                   headers)
 
     list_cleaner.ctl()
 
