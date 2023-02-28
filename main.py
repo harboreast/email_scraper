@@ -1,6 +1,5 @@
 import re
 from urllib.parse import urlparse
-
 import requests
 import urllib3
 import scrape_emails
