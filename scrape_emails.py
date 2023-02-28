@@ -4,7 +4,7 @@ import socket
 import requests.exceptions
 from bs4 import BeautifulSoup
 from urllib.parse import urlsplit
-
+from tld import get_tld, get_fld
 
 def scraper_main(unprocessed_urls,
                  processed_urls,
@@ -14,10 +14,8 @@ def scraper_main(unprocessed_urls,
                  ttl_pages_scraped,
                  pbar,
                  pbar2,
-                 emails,
-                 headers,
-                 domain):
-  
+                 emails):
+
     # process urls one by one from unprocessed_url queue until queue is empty
     while len(unprocessed_urls):
 
@@ -51,10 +49,12 @@ def scraper_main(unprocessed_urls,
         if "smartlink" in url:
             continue
 
-        pbar2.refresh()
-        pbar2.set_description(f"Host: {domain}: Progress")
+        d = get_fld(starting_url, fix_protocol=True)
 
-        if domain in url:
+        #pbar2.refresh()
+        pbar2.set_description(f"Host: {d}: Progress")
+
+        if d in url:
 
             h = requests.head(url)
             header = h.headers
@@ -75,7 +75,7 @@ def scraper_main(unprocessed_urls,
                 continue
 
             try:
-                response = requests.get(url, timeout=10, verify=True, headers=headers)
+                response = requests.get(url, timeout=10)
                 skipped = False
             except requests.exceptions.SSLError as e:
                 skipped = True
@@ -106,7 +106,7 @@ def scraper_main(unprocessed_urls,
             # print("Crawling URL %s" % url)
 
             try:
-                response = requests.get(url, timeout=10, verify=True, headers=headers)
+                response = requests.get(url, timeout=10)
                 ttl_pages_scraped += 1
                 pbar2.update(1)
                 skipped = False
