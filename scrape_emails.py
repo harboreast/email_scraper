@@ -1,10 +1,42 @@
 import http
 import re
 import socket
+import time
+
 import requests.exceptions
 from bs4 import BeautifulSoup
 from urllib.parse import urlsplit
 from tld import get_tld, get_fld
+from tqdm.auto import tqdm
+import urllib3
+from urllib3.exceptions import ReadTimeoutError
+import sys
+
+try:
+    from requests.packages.urllib3.exceptions import ReadTimeoutError
+except:
+    try:
+        from urllib3.exceptions import ReadTimeoutError
+
+        ReadTimeoutError
+    except:
+        print("Something seems wrong with the urllib3 installation.\nQuitting")
+        sys.exit(const.EFatal)
+
+
+def skip_checka(skip_cntr):
+    if skip_cntr >= 3:
+        skip_this_bitch = True
+    else:
+        skip_this_bitch = False
+    return skip_this_bitch
+
+
+def force_fill_bar(pbar2):
+    for i in range(1, 100):
+        pbar2.update(1)
+        time.sleep(.01)
+
 
 def scraper_main(unprocessed_urls,
                  processed_urls,
@@ -13,8 +45,12 @@ def scraper_main(unprocessed_urls,
                  urls,
                  ttl_pages_scraped,
                  pbar,
-                 pbar2,
-                 emails):
+                 emails,
+                 domain_cntr,
+                 skip_cntr,
+                 headers):
+    # second instance of progress bar (the second printed on the terminal screen)
+    pbar2 = tqdm(desc='Loading next host...', total=100, position=0, leave=False)
 
     # process urls one by one from unprocessed_url queue until queue is empty
     while len(unprocessed_urls):
@@ -28,94 +64,216 @@ def scraper_main(unprocessed_urls,
         base_url = "{0.scheme}://{0.netloc}".format(parts)
         path = url[:url.rfind('/') + 1] if '/' in parts.path else url
 
-        if cntr >= 333:
+        if cntr >= 100:
             cntr = 0
-            pbar2.reset()
+            pbar2.refresh()
             break
 
         # check url for banned keywords
         if "javascript" in url:
-            continue
+            break
         if "void" in url:
-            continue
+            break
         if "java" in url:
-            continue
+            break
         if "WebForm" in url:
-            continue
+            break
         if "PostBack" in url:
-            continue
+            break
         if "tel:" in url:
-            continue
+            break
         if "smartlink" in url:
-            continue
+            break
+
+        try:
+            # Get Url
+            get = requests.get(url, verify=False, headers=headers)
+            # if the request succeeds
+            if get.status_code == 200:
+                d = "g"
+            else:
+                force_fill_bar(pbar2)
+                break
+
+        # Exception
+        except requests.exceptions.RequestException as e:
+            force_fill_bar(pbar2)
+            break
 
         d = get_fld(starting_url, fix_protocol=True)
 
-        #pbar2.refresh()
+        # pbar2.refresh()
         pbar2.set_description(f"Host: {d}: Progress")
 
         if d in url:
 
-            h = requests.head(url)
+            h = requests.head(url, verify=False, headers=headers)
+
             header = h.headers
             content_type = header.get('content-type')
 
             # print(content_type, cntr) # use for debugging
 
             if content_type is None:
-                dg = "4e"
+                force_fill_bar(pbar2)
+                skipped = True
+                cntr = 0
+                pbar2.refresh()
+                break
+
             elif "video" in content_type:
+                force_fill_bar(pbar2)
                 skipped = True
-                continue
+                cntr = 0
+                pbar2.refresh()
+                break
+
             elif "application" in content_type:
+                force_fill_bar(pbar2)
                 skipped = True
-                continue
+                cntr = 0
+                pbar2.refresh()
+                break
+
             elif "image" in content_type:
-                skipped = True
-                continue
+                force_fill_bar(pbar2)
+                cntr = 0
+                pbar2.refresh()
+                break
 
             try:
-                response = requests.get(url, timeout=10)
+                response = requests.get(url, verify=False, headers=headers)
                 skipped = False
-            except requests.exceptions.SSLError as e:
+            except ReadTimeoutError:
+                force_fill_bar(pbar2)
                 skipped = True
+                skip_cntr += 1
+                skip_check = skip_checka(skip_cntr)
+                if skip_check:
+                    cntr = 0
+                    pbar2.refresh()
+                    break
+
+                continue
+            except requests.exceptions.SSLError as e:
+                force_fill_bar(pbar2)
+                skipped = True
+                skip_cntr += 1
+                skip_check = skip_checka(skip_cntr)
+                if skip_check:
+                    cntr = 0
+                    pbar2.refresh()
+                    break
+
                 continue
             except requests.exceptions.RequestException as e:
+                force_fill_bar(pbar2)
                 skipped = True
+                skip_cntr += 1
+                skip_check = skip_checka(skip_cntr)
+                if skip_check:
+                    cntr = 0
+                    pbar2.refresh()
+                    break
+
                 continue
             except (requests.exceptions.MissingSchema, requests.exceptions.ConnectionError):
+                force_fill_bar(pbar2)
                 # ignore pages with errors and continue with next url
                 skipped = True
+                skip_cntr += 1
+                skip_check = skip_checka(skip_cntr)
+                if skip_check:
+                    cntr = 0
+                    pbar2.refresh()
+                    break
+
                 continue
             except urllib.error.HTTPError as e:
+                force_fill_bar(pbar2)
                 skipped = True
-                # status = e.__dict__
+                skip_cntr += 1
+                skip_check = skip_checka(skip_cntr)
+                if skip_check:
+                    cntr = 0
+                    pbar2.refresh()
+                    break
+
                 continue
             except urllib.error.URLError as e:
+                force_fill_bar(pbar2)
                 skipped = True
-                # status = e.__dict__
+                skip_cntr += 1
+                skip_check = skip_checka(skip_cntr)
+                if skip_check:
+                    cntr = 0
+                    pbar2.refresh()
+                    break
+
                 continue
             except socket.error as e:
+                force_fill_bar(pbar2)
                 skipped = True
-                # if e.errno != errno.ECONNRESET:
+                skip_cntr += 1
+                skip_check = skip_checka(skip_cntr)
+                if skip_check:
+                    cntr = 0
+                    pbar2.refresh()
+                    break
+
                 continue
             except http.client.IncompleteRead as e:
+                force_fill_bar(pbar2)
                 skipped = True
+                skip_cntr += 1
+                skip_check = skip_checka(skip_cntr)
+                if skip_check:
+                    cntr = 0
+                    pbar2.refresh()
+                    break
+
                 continue
 
             # print("Crawling URL %s" % url)
 
             try:
-                response = requests.get(url, timeout=10)
+                response = requests.get(url, verify=False, headers=headers)
                 ttl_pages_scraped += 1
                 pbar2.update(1)
                 skipped = False
+            except ReadTimeoutError:
+                force_fill_bar(pbar2)
+                skipped = True
+                skip_cntr += 1
+                skip_check = skip_checka(skip_cntr)
+                if skip_check:
+                    cntr = 0
+                    pbar2.refresh()
+                    break
+
+                continue
             except (requests.exceptions.MissingSchema, requests.exceptions.ConnectionError):
+                force_fill_bar(pbar2)
                 # ignore pages with errors and continue with next url
                 skipped = True
+                skip_cntr += 1
+                skip_check = skip_checka(skip_cntr)
+                if skip_check:
+                    cntr = 0
+                    pbar2.refresh()
+                    break
+
                 continue
             except requests.exceptions.SSLError as e:
+                force_fill_bar(pbar2)
                 skipped = True
+                skip_cntr += 1
+                skip_check = skip_checka(skip_cntr)
+                if skip_check:
+                    cntr = 0
+                    pbar2.refresh()
+                    break
+
                 continue
 
             # extract all email addresses and add them into the resulting set
