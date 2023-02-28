@@ -1,6 +1,8 @@
 import urllib.error
 import os
+import requests
 from header_asci import headr_asci
+
 
 def las():
     with open('scraped_emails.txt', 'w') as f:
@@ -14,3 +16,14 @@ def las():
 
     email_addys = []
     scraped_emails = []
+
+
+def get_urls():
+    urls = []
+    cleaned_urls = []
+    f = open('input_urls.txt', 'r+')
+    f1 = f.readlines()
+    for i in f1:
+        urls.append(i.rstrip())
+
+    return urls
