@@ -2,6 +2,8 @@ Script is designed to loop through a text file of websites, crawl them, and sear
 
 If the script runs out of urls to crawl it will move on to the next host, it will also do this if a wide array of exceptions are raised with urllib3 and requests, etc. If you are only scraping one or two hosts, and they are large corporations or big websites, raise the number on the max_crawl_pages variable higher (xxx-x,xxx). The script is single threaded, it is not the quickest but the data it yields you should be beneficial.
 
+If you are scraping a large amount of smaller "mom and pop" or "hobby" websites, max_crawl_pages should be defined at a lower value, that is for you to decide.
+
 === Associated text files ====
 
 input_urls.txt - this is the list of urls the script will loop through format must be "http://www.domain.com" (or https).
