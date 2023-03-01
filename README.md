@@ -2,8 +2,7 @@
 
 Single threaded data scraper that will loop through a txt file of predefined domains, crawl the domains and then scrape and save any found emails to txt.
 
-I'm from the internet.
-
+When the script starts user is prompted with an input that asks if they want to check the urls, if "y" is selected the script will check each url in the file to see if it is active, if so the script resaves the urls into input_urls.txt, otherwise it will load input_urls.txt and start crawling the domain in search of email addresses to scrape.
 
 ====== Txt files associated with script ======
 
