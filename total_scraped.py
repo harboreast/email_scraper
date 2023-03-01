@@ -18,14 +18,14 @@ def total_pages_scraped():
 # open file get value
 def total_final_emails_scraped():
     email_cnt_list = []
-    f = open('final_scraped_emails.txt.txt', 'r+')
+    f = open('final_scraped_emails.txt', 'r+')
     f1 = f.readlines()
+    final_em_cnt = 0
     for i in f1:
         email_cnt_list.append(i.rstrip())
+        final_em_cnt += 1
 
-    final_em_cntr = int(f1[0])
-
-    return final_em_cntr
+    return final_em_cnt
 
 
 # update the total pages scraped count
@@ -49,7 +49,8 @@ def create_the_txtfile():
     return cntr
 
 
+ttl_pages_scraped = total_pages_scraped()
+
+
 def final_stats(num_lines):
-    print("Total hosts initially loaded:", num_lines,
-          "\nTotal Pages Scanned:", total_pages_scraped(),
-          "\nTotal Emails Scraped:", total_final_emails_scraped())
+    print("Total Emails Scraped:", total_final_emails_scraped())
