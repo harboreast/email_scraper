@@ -50,9 +50,10 @@ def scraper_main(unprocessed_urls,
                  domain_cntr,
                  skip_cntr,
                  headers,
-                 ttlscrps):
+                 ttlscrps,
+                 max_to_crawl):
     # second instance of progress bar (the second printed on the terminal screen)
-    pbar2 = tqdm(desc='Loading next host...', total=100, position=1, leave=False)
+    pbar2 = tqdm(desc='Loading next host...', total=max_to_crawl, position=1, leave=False)
 
     # process urls one by one from unprocessed_url queue until que is empty
     while len(unprocessed_urls):
@@ -87,7 +88,7 @@ def scraper_main(unprocessed_urls,
             break
 
         # if 100 pages on this host have been checked break loop move to next item in list
-        if cntr >= 100:
+        if cntr >= max_to_crawl:
             cntr = 0
             # # pbar2.refresh()
             break
