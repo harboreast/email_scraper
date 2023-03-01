@@ -41,6 +41,9 @@ domain_cntr = 0
 ttl_pages_scraped = 0
 em_cntr = 0
 
+# total amount of maximum pages per host to crawl
+max_to_crawl = 33
+
 for i in (pbar := tqdm(urls, total=num_lines, position=0, leave=False)):
 
     if first_run:
@@ -78,7 +81,8 @@ for i in (pbar := tqdm(urls, total=num_lines, position=0, leave=False)):
                                domain_cntr,
                                skip_cntr,
                                lists_and_shit.headers,
-                               ttlscrps)
+                               ttlscrps,
+                               max_to_crawl)
 
 # final sanitization of emails list to remove
 # data scraped that is not an email address
