@@ -9,4 +9,4 @@ When the script starts user is prompted with an input that asks if they want to 
 scraped_emails.txt is an uncleaned original list of perceieved email data.
 final_scraped_emails.txt is the clensed list from scraped_emails.txt
 
-I will update the script to be more incongnito with use of header data and proxies, just had no need at this point.
+I will update the script to be more incongnito with use of header data and proxies, just had no need at this point. Still working on debugging it, once it is working 100% I will document it better.
