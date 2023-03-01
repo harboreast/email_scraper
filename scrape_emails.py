@@ -154,27 +154,27 @@ def scraper_main(unprocessed_urls,
                 skipped = True
                 cntr = 0
                 # # pbar2.refresh()
-                break
+                continue
 
             elif "video" in content_type:
                 force_fill_bar(pbar2)
                 skipped = True
                 cntr = 0
                 # # pbar2.refresh()
-                break
+                continue
 
             elif "application" in content_type:
                 force_fill_bar(pbar2)
                 skipped = True
                 cntr = 0
                 # # pbar2.refresh()
-                break
+                continue
 
             elif "image" in content_type:
                 force_fill_bar(pbar2)
                 cntr = 0
                 # # pbar2.refresh()
-                break
+                continue
 
             try:
                 response = requests.get(url, verify=False, headers=headers, timeout=10)
@@ -182,111 +182,39 @@ def scraper_main(unprocessed_urls,
             except urllib.error.URLError:
                 force_fill_bar(pbar2)
                 skipped = True
-                skip_cntr += 1
-                skip_check = skip_checka(skip_cntr)
-
-                if skip_check:
-                    cntr = 0
-                    # pbar2.refresh()
-                    break
-
                 continue
             except ReadTimeoutError:
                 force_fill_bar(pbar2)
                 skipped = True
-                skip_cntr += 1
-                skip_check = skip_checka(skip_cntr)
-
-                if skip_check:
-                    cntr = 0
-                    # pbar2.refresh()
-                    break
-
                 continue
             except requests.exceptions.SSLError as e:
                 force_fill_bar(pbar2)
                 skipped = True
-                skip_cntr += 1
-                skip_check = skip_checka(skip_cntr)
-                if skip_check:
-                    force_fill_bar(pbar2)
-                    cntr = 0
-                    # pbar2.refresh()
-                    break
-
                 continue
             except requests.exceptions.RequestException as e:
                 force_fill_bar(pbar2)
                 skipped = True
-                skip_cntr += 1
-                skip_check = skip_checka(skip_cntr)
-                if skip_check:
-                    force_fill_bar(pbar2)
-                    cntr = 0
-                    # pbar2.refresh()
-                    break
-
                 continue
             except (requests.exceptions.MissingSchema, requests.exceptions.ConnectionError):
                 force_fill_bar(pbar2)
                 # ignore pages with errors and continue with next url
                 skipped = True
-                skip_cntr += 1
-                skip_check = skip_checka(skip_cntr)
-                if skip_check:
-                    force_fill_bar(pbar2)
-                    cntr = 0
-                    # pbar2.refresh()
-                    break
-
                 continue
             except urllib.error.HTTPError as e:
                 force_fill_bar(pbar2)
                 skipped = True
-                skip_cntr += 1
-                skip_check = skip_checka(skip_cntr)
-                if skip_check:
-                    force_fill_bar(pbar2)
-                    cntr = 0
-                    # pbar2.refresh()
-                    break
-
                 continue
             except urllib.error.URLError as e:
                 force_fill_bar(pbar2)
                 skipped = True
-                skip_cntr += 1
-                skip_check = skip_checka(skip_cntr)
-                if skip_check:
-                    force_fill_bar(pbar2)
-                    cntr = 0
-                    # pbar2.refresh()
-                    break
-
                 continue
             except socket.error as e:
                 force_fill_bar(pbar2)
                 skipped = True
-                skip_cntr += 1
-                skip_check = skip_checka(skip_cntr)
-                if skip_check:
-                    force_fill_bar(pbar2)
-                    cntr = 0
-                    # pbar2.refresh()
-                    break
-
                 continue
             except http.client.IncompleteRead as e:
                 force_fill_bar(pbar2)
                 skipped = True
-                skip_cntr += 1
-                skip_check = skip_checka(skip_cntr)
-                if skip_check:
-                    force_fill_bar(pbar2)
-                    cntr = 0
-                    # pbar2.refresh()
-                    break
-
                 continue
 
             # print("Crawling URL %s" % url)
@@ -300,52 +228,19 @@ def scraper_main(unprocessed_urls,
             except urllib.error.URLError:
                 force_fill_bar(pbar2)
                 skipped = True
-                skip_cntr += 1
-                skip_check = skip_checka(skip_cntr)
-
-                if skip_check:
-                    force_fill_bar(pbar2)
-                    cntr = 0
-                    # pbar2.refresh()
-                    break
-
                 continue
             except ReadTimeoutError:
                 force_fill_bar(pbar2)
                 skipped = True
-                skip_cntr += 1
-                skip_check = skip_checka(skip_cntr)
-                if skip_check:
-                    force_fill_bar(pbar2)
-                    cntr = 0
-                    # pbar2.refresh()
-                    break
-
                 continue
             except (requests.exceptions.MissingSchema, requests.exceptions.ConnectionError):
                 force_fill_bar(pbar2)
                 # ignore pages with errors and continue with next url
                 skipped = True
-                skip_cntr += 1
-                skip_check = skip_checka(skip_cntr)
-                if skip_check:
-                    force_fill_bar(pbar2)
-                    cntr = 0
-                    # pbar2.refresh()
-                    break
-
                 continue
             except requests.exceptions.SSLError as e:
                 force_fill_bar(pbar2)
                 skipped = True
-                skip_cntr += 1
-                skip_check = skip_checka(skip_cntr)
-                if skip_check:
-                    force_fill_bar(pbar2)
-                    cntr = 0
-                    # pbar2.refresh()
-                    break
-
                 continue
 
             # extract all email addresses and add them into the resulting set
