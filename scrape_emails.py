@@ -276,12 +276,6 @@ def scraper_main(unprocessed_urls,
         if not skipped:
             cntr += 1
 
-            # f = open("ttl_pages_counter.txt", "w+")
-            # ttl_pages_scraped = str(ttl_pages_scraped)
-
-            # for i in range(1):
-                # f.write(ttl_pages_scraped)
-            # ttl_pages_scraped = int(ttl_pages_scraped)
         ttl_pages_scraped = int(len(ttlscrps))
 
         email_total_cnt = int(len(emails))
