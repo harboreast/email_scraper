@@ -1,3 +1,5 @@
+=== Gangster Scraper ===
+
 Script is designed to loop through a text file of websites, crawl them, and search for email contact data. If found, the script will save the data. The amount of maximum pages per host to attempt to crawl is set in the variable called "max_crawl_pages", which is by default set to 33 and located on line 45 of main.py
 
 If the script runs out of urls to crawl it will move on to the next host, it will also do this if a wide array of exceptions are raised with urllib3 and requests, etc. If you are only scraping one or two hosts, and they are large corporations or big websites, raise the number on the max_crawl_pages variable higher (xxx-x,xxx). The script is single threaded, it is not the quickest but the data it yields you should be beneficial.
