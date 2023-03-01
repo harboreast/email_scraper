@@ -11,6 +11,7 @@ from tqdm.auto import tqdm
 import urllib3
 from urllib3.exceptions import ReadTimeoutError
 import sys
+import validators
 
 try:
     from requests.packages.urllib3.exceptions import ReadTimeoutError
@@ -49,7 +50,6 @@ def scraper_main(unprocessed_urls,
                  domain_cntr,
                  skip_cntr,
                  headers):
-    
     # second instance of progress bar (the second printed on the terminal screen)
     pbar2 = tqdm(desc='Loading next host...', total=100, position=0, leave=False)
 
@@ -64,6 +64,10 @@ def scraper_main(unprocessed_urls,
         parts = urlsplit(url)
         base_url = "{0.scheme}://{0.netloc}".format(parts)
         path = url[:url.rfind('/') + 1] if '/' in parts.path else url
+
+        #validate url to search for malformed urls that will break script
+        if not validators.url(url):
+            break
 
         if cntr >= 100:
             cntr = 0
@@ -88,7 +92,7 @@ def scraper_main(unprocessed_urls,
 
         try:
             # Get Url
-            get = requests.get(url, verify=False, headers=headers)
+            get = requests.get(url, verify=False, headers=headers, timeout=10)
             # if the request succeeds
             if get.status_code == 200:
                 d = "g"
@@ -108,7 +112,7 @@ def scraper_main(unprocessed_urls,
 
         if d in url:
 
-            h = requests.head(url, verify=False, headers=headers)
+            h = requests.head(url, verify=False, headers=headers, timeout=10)
 
             header = h.headers
             content_type = header.get('content-type')
@@ -143,7 +147,7 @@ def scraper_main(unprocessed_urls,
                 break
 
             try:
-                response = requests.get(url, verify=False, headers=headers)
+                response = requests.get(url, verify=False, headers=headers, timeout=10)
                 skipped = False
             except ReadTimeoutError:
                 force_fill_bar(pbar2)
@@ -238,7 +242,7 @@ def scraper_main(unprocessed_urls,
             # print("Crawling URL %s" % url)
 
             try:
-                response = requests.get(url, verify=False, headers=headers)
+                response = requests.get(url, verify=False, headers=headers, timeout=10)
                 ttl_pages_scraped += 1
                 pbar2.update(1)
                 skipped = False
