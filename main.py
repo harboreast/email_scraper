@@ -42,7 +42,7 @@ ttl_pages_scraped = 0
 em_cntr = 0
 
 # total amount of maximum pages per host to crawl
-max_to_crawl = 33
+max_to_crawl = 100
 
 for i in (pbar := tqdm(urls, total=num_lines, position=0, leave=False)):
 
@@ -100,7 +100,7 @@ list_cleaner.ctl()
 yt.cracker()
 
 # print final stats
-total_scraped.final_stats(num_lines)
+total_scraped.final_stats()
 
 # script is finished, delete ttl_pages_counter.txt file
 lists_and_shit.del_ttl_pages_counterfile()
