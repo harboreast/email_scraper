@@ -48,6 +48,6 @@ def create_the_txtfile():
 
     return cntr
 
-def final_stats(num_lines):
+def final_stats():
     ttl_pages_scraped = total_pages_scraped()
     print("Total Emails Scraped:", total_final_emails_scraped())
