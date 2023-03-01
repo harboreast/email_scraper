@@ -2,6 +2,7 @@ import http
 import re
 import socket
 import time
+import urllib
 
 import requests.exceptions
 from bs4 import BeautifulSoup
@@ -53,7 +54,7 @@ def scraper_main(unprocessed_urls,
     # second instance of progress bar (the second printed on the terminal screen)
     pbar2 = tqdm(desc='Loading next host...', total=100, position=0, leave=False)
 
-    # process urls one by one from unprocessed_url queue until queue is empty
+    # process urls one by one from unprocessed_url queue until que is empty
     while len(unprocessed_urls):
 
         # move next url from the queue to the set of processed urls
@@ -65,10 +66,27 @@ def scraper_main(unprocessed_urls,
         base_url = "{0.scheme}://{0.netloc}".format(parts)
         path = url[:url.rfind('/') + 1] if '/' in parts.path else url
 
-        #validate url to search for malformed urls that will break script
+        # validate url to search for malformed urls that will break script
         if not validators.url(url):
             break
 
+        # check one final time to see if url is accessible
+
+        try:
+            # Get Url
+            get = requests.get(url, verify=True, timeout=5)
+            # if the request succeeds
+            if get.status_code == 200:
+                d ='g'
+            else:
+                force_fill_bar(pbar2)
+                break
+
+        # Exception
+        except requests.exceptions.RequestException as e:
+            break
+
+        # if 100 pages on this host have been checked break loop move to next item in list
         if cntr >= 100:
             cntr = 0
             pbar2.refresh()
@@ -102,6 +120,9 @@ def scraper_main(unprocessed_urls,
 
         # Exception
         except requests.exceptions.RequestException as e:
+            force_fill_bar(pbar2)
+            break
+        except urllib.error.URLError:
             force_fill_bar(pbar2)
             break
 
@@ -149,11 +170,24 @@ def scraper_main(unprocessed_urls,
             try:
                 response = requests.get(url, verify=False, headers=headers, timeout=10)
                 skipped = False
+            except urllib.error.URLError:
+                force_fill_bar(pbar2)
+                skipped = True
+                skip_cntr += 1
+                skip_check = skip_checka(skip_cntr)
+
+                if skip_check:
+                    cntr = 0
+                    pbar2.refresh()
+                    break
+
+                continue
             except ReadTimeoutError:
                 force_fill_bar(pbar2)
                 skipped = True
                 skip_cntr += 1
                 skip_check = skip_checka(skip_cntr)
+
                 if skip_check:
                     cntr = 0
                     pbar2.refresh()
@@ -246,6 +280,18 @@ def scraper_main(unprocessed_urls,
                 ttl_pages_scraped += 1
                 pbar2.update(1)
                 skipped = False
+            except urllib.error.URLError:
+                force_fill_bar(pbar2)
+                skipped = True
+                skip_cntr += 1
+                skip_check = skip_checka(skip_cntr)
+
+                if skip_check:
+                    cntr = 0
+                    pbar2.refresh()
+                    break
+
+                continue
             except ReadTimeoutError:
                 force_fill_bar(pbar2)
                 skipped = True
