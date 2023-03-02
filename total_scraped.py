@@ -27,12 +27,6 @@ def total_final_emails_scraped():
 
     return final_em_cnt
 
-
-# update the total pages scraped count
-# def update_total_pages_scraped(cntr):
-# d = 'g'
-
-
 def create_the_txtfile():
     f = open("ttl_pages_counter.txt", "w+")
     for i in range(1):
