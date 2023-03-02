@@ -3,7 +3,6 @@ import re
 import socket
 import time
 import urllib
-
 import requests.exceptions
 from bs4 import BeautifulSoup
 from urllib.parse import urlsplit
