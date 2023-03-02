@@ -10,7 +10,7 @@ If you are scraping a large amount of smaller "mom and pop" or "hobby" websites,
 
 input_urls.txt - this is the list of urls the script will loop through format must be "http://www.domain.com" (or https).
 
-ttl_pages_counter.txt - this file stores the current amount of single webpages that have been crawled, I did this to later add "start from where you left off functionality". Which I will add in coming days. The script will create this file on it's own and delete it after it's finished working. If the script crashes, for now you must manually delete this final before running the script.
+ttl_pages_counter.txt - this file stores the current amount of single webpages that have been crawled, I did this to later add "start from where you left off functionality". Which I will add in coming days. The script will create this file on it's own and delete it after it's finished working. If the script crashes, for now you must manually delete this file before running the script.
 
 scraped_emails.txt - this is the intial set of percieved scraped email data, at times "junk data" (non email address) will be scraped, when the script is done looping through the input_urls, a final sanitization will be done of the list to remove any unwanted data.
 
