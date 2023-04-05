@@ -1,12 +1,19 @@
 === Installation notes ===
 
 pip3 install urllib3
+
 pip3 install requests
+
 pip3 install bs4
+
 pip3 install tld
+
 pip3 install tqdm
+
 pip3 install validators
+
 pip3 install lxml
+
 pip3 install deeznuttz
 
 (jk that last one is not real)
