@@ -14,10 +14,6 @@ pip3 install validators
 
 pip3 install lxml
 
-pip3 install deeznuttz
-
-(jk that last one is not real)
-
 
 === Gangster Scraper ===
 
