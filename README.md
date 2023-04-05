@@ -1,3 +1,17 @@
+=== Installation notes ===
+
+pip3 install urllib3
+pip3 install requests
+pip3 install bs4
+pip3 install tld
+pip3 install tqdm
+pip3 install validators
+pip3 install lxml
+pip3 install deeznuttz
+
+(jk that last one is not real)
+
+
 === Gangster Scraper ===
 
 Script is designed to loop through a text file of websites, crawl them, and search for email contact data. If found, the script will save the data. The amount of maximum pages per host to attempt to crawl is set in the variable called "max_crawl_pages", which is by default set to 33 and located on line 45 of main.py
